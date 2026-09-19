@@ -9,8 +9,6 @@ database.init_db()
 def current_user():
     return session.get("user_id")
 
-# ---------- ثبت‌نام و ورود ----------
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -47,8 +45,6 @@ def logout():
     session.clear()
     return redirect("/login")
 
-# ---------- داشبورد ----------
-
 @app.route("/")
 def index():
     if not current_user():
@@ -66,8 +62,6 @@ def index():
                            total=total, profit=total_profit,
                            today_total=today_total, today_profit=today_profit,
                            low_stock=low_stock, cash_balance=cash_balance)
-
-# ---------- محصولات ----------
 
 @app.route("/products")
 def products():
@@ -106,8 +100,6 @@ def delete_product(product_id):
         return redirect("/login")
     database.delete_product(current_user(), product_id)
     return redirect("/products")
-
-# ---------- مشتری‌ها ----------
 
 @app.route("/customers")
 def customers():
@@ -159,8 +151,6 @@ def pay_debt(customer_id):
     database.pay_debt(current_user(), customer_id, amount)
     return redirect("/customers")
 
-# ---------- فاکتورها ----------
-
 @app.route("/invoices")
 def invoices():
     if not current_user():
@@ -182,6 +172,7 @@ def create_invoice():
         return redirect("/login")
     uid = current_user()
     customer_id = int(request.form["customer_id"])
+    payment_type = request.form.get("payment_type", "cash")
     items = []
     for key in request.form:
         if key.startswith("count_"):
@@ -197,7 +188,7 @@ def create_invoice():
                             "buy_price": p["buy_price"]
                         })
     if items:
-        database.add_invoice(uid, customer_id, items)
+        database.add_invoice(uid, customer_id, items, payment_type)
     return redirect("/invoices")
 
 @app.route("/invoice/<int:invoice_id>")
@@ -221,8 +212,6 @@ def delete_invoice(invoice_id):
     database.delete_invoice(current_user(), invoice_id)
     return redirect("/invoices")
 
-# ---------- صندوق ----------
-
 @app.route("/cash", methods=["GET", "POST"])
 def cash():
     if not current_user():
@@ -237,8 +226,6 @@ def cash():
     return render_template("cash.html",
                            cash_list=database.get_cash(uid),
                            balance=database.get_cash_balance(uid))
-
-# ---------- گزارش‌ها ----------
 
 @app.route("/reports")
 def reports():
@@ -262,8 +249,6 @@ def reports():
                            w_total=w_total, w_profit=w_profit,
                            m_total=m_total, m_profit=m_profit,
                            y_total=y_total, y_profit=y_profit)
-
-# ---------- پشتیبانی ----------
 
 @app.route("/support")
 def support():
