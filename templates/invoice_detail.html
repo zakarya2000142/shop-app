@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}جزئیات فاکتور{% endblock %}
+{% block header %}🧾 فاکتور شماره {{ invoice["id"] }}{% endblock %}
+{% block content %}
+
+<div class="cards">
+    <div class="card">
+        <h3>مشتری</h3>
+        <p>{{ invoice["customer_name"] or "مهمان" }}</p>
+    </div>
+    <div class="card">
+        <h3>تاریخ</h3>
+        <p style="font-size:16px;">{{ invoice["date"] }}</p>
+    </div>
+    <div class="card">
+        <h3>مبلغ کل</h3>
+        <p>{{ "{:,}".format(invoice["total_amount"]) }}</p>
+    </div>
+    <div class="card">
+        <h3>سود</h3>
+        <p>{{ "{:,}".format(invoice["total_profit"]) }}</p>
+    </div>
+</div>
+
+<table>
+    <tr>
+        <th>محصول</th>
+        <th>تعداد</th>
+        <th>قیمت واحد</th>
+        <th>جمع</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item["product_name"] }}</td>
+        <td>{{ item["count"] }}</td>
+        <td>{{ "{:,}".format(item["sell_price"]) }}</td>
+        <td>{{ "{:,}".format(item["sell_price"] * item["count"]) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
