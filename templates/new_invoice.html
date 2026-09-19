@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}فاکتور جدید{% endblock %}
+{% block header %}🧾 فاکتور جدید{% endblock %}
+{% block content %}
+
+<form action="/create_invoice" method="post" style="flex-direction:column; align-items:stretch;">
+    <label style="margin-bottom:8px;">مشتری:</label>
+    <select name="customer_id" required style="margin-bottom:20px;">
+        <option value="">انتخاب مشتری</option>
+        {% for c in customers %}
+        <option value="{{ c['id'] }}">{{ c["name"] }}</option>
+        {% endfor %}
+    </select>
+
+    <label style="margin-bottom:8px;">محصولات:</label>
+    {% for p in products %}
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="flex:1;">{{ p["name"] }} (موجودی: {{ p["count"] }}) - {{ "{:,}".format(p["sell_price"]) }} تومان</span>
+        <input type="number" name="count_{{ p['id'] }}" value="0" min="0" max="{{ p['count'] }}" style="max-width:100px;">
+    </div>
+    {% endfor %}
+
+    <button type="submit" style="margin-top:20px;">ثبت فاکتور</button>
+</form>
+
+{% endblock %}
