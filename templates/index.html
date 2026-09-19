@@ -1,10 +1,43 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>مدیریت فروشگاه</title>
-</head>
-<body>
-    <h1>سایت کار می‌کنه!</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}داشبورد{% endblock %}
+{% block content %}
+
+{% if low_stock %}
+<div class="alert">
+    ⚠️ توجه! {{ low_stock|length }} محصول با موجودی کمتر از ۲ وجود دارد:
+    {% for p in low_stock %} {{ p["name"] }}{% if not loop.last %}،{% endif %}{% endfor %}
+</div>
+{% endif %}
+
+<div class="cards">
+    <div class="card">
+        <h3>فروش امروز</h3>
+        <p>{{ "{:,}".format(today_total) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>سود امروز</h3>
+        <p>{{ "{:,}".format(today_profit) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>فروش کل</h3>
+        <p>{{ "{:,}".format(total) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>سود کل</h3>
+        <p>{{ "{:,}".format(profit) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>موجودی صندوق</h3>
+        <p>{{ "{:,}".format(cash_balance) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>محصولات</h3>
+        <p>{{ products|length }}</p>
+    </div>
+    <div class="card">
+        <h3>مشتری‌ها</h3>
+        <p>{{ customers|length }}</p>
+    </div>
+</div>
+
+{% endblock %}
