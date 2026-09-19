@@ -12,6 +12,18 @@
         {% endfor %}
     </select>
 
+    <label style="margin-bottom:8px;">نوع پرداخت:</label>
+    <div style="display:flex; gap:20px; justify-content:center; margin-bottom:20px;">
+        <label style="display:flex; align-items:center; gap:5px;">
+            <input type="radio" name="payment_type" value="cash" checked style="width:auto;">
+            💵 نقدی
+        </label>
+        <label style="display:flex; align-items:center; gap:5px;">
+            <input type="radio" name="payment_type" value="credit" style="width:auto;">
+            📝 نسیه
+        </label>
+    </div>
+
     <label style="margin-bottom:8px;">محصولات:</label>
     {% for p in products %}
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
