@@ -15,6 +15,7 @@
         <th>تاریخ</th>
         <th>مبلغ کل</th>
         <th>سود</th>
+        <th>نوع پرداخت</th>
         <th>مشاهده</th>
         <th>حذف</th>
     </tr>
@@ -25,6 +26,13 @@
         <td>{{ i["date"] }}</td>
         <td>{{ "{:,}".format(i["total_amount"]) }}</td>
         <td>{{ "{:,}".format(i["total_profit"]) }}</td>
+        <td>
+            {% if i["payment_type"] == "credit" %}
+                <span style="color:red;">📝 نسیه</span>
+            {% else %}
+                <span style="color:green;">💵 نقدی</span>
+            {% endif %}
+        </td>
         <td><a class="icon-link" href="/invoice/{{ i['id'] }}">👁️</a></td>
         <td><a class="icon-link" href="/delete_invoice/{{ i['id'] }}" onclick="return confirm('مطمئنی؟')">🗑️</a></td>
     </tr>
