@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}ویرایش محصول{% endblock %}
+{% block header %}✏️ ویرایش محصول{% endblock %}
+{% block content %}
+
+<form method="post" style="max-width:500px; margin:0 auto; flex-direction:column;">
+    <input type="text" name="name" value="{{ product['name'] }}" required>
+    <input type="number" name="buy_price" value="{{ product['buy_price'] }}" required>
+    <input type="number" name="sell_price" value="{{ product['sell_price'] }}" required>
+    <input type="number" name="count" value="{{ product['count'] }}" required>
+    <button type="submit">ذخیره</button>
+</form>
+
+{% endblock %}
