@@ -14,11 +14,15 @@
         .error { color: red; text-align: center; font-size: 14px; }
         .link { text-align: center; margin-top: 15px; font-size: 14px; }
         .link a { color: #1976D2; text-decoration: none; }
+        .warning { background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
     <form method="post">
         <h1>🛒 ثبت‌نام</h1>
+        <div class="warning">
+            ⚠️ نام کاربری و رمز خود را یادداشت کنید. بازیابی ندارد.
+        </div>
         {% if error %}<p class="error">{{ error }}</p>{% endif %}
         <input type="text" name="username" placeholder="یوزرنیم" required>
         <input type="password" name="password" placeholder="پسورد" required>
