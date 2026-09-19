@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}مدیریت فروشگاه{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Vazirmatn, Tahoma; background: #f0f4f8; margin: 0; padding: 20px; }
+        h1 { color: #1976D2; text-align: center; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .topbar { background: white; padding: 10px 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; }
+        .topbar .user { color: #666; font-size: 14px; }
+        .topbar .logout { color: #e53935; text-decoration: none; font-size: 14px; }
+        .nav { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .nav a { padding: 8px 20px; background: #1976D2; color: white; text-decoration: none; border-radius: 8px; font-size: 15px; }
+        .nav a:hover { background: #1565C0; }
+        form { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        input, select { padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: Vazirmatn; font-size: 15px; flex: 1; min-width: 120px; }
+        button { padding: 10px 25px; background: #1976D2; color: white; border: none; border-radius: 8px; font-family: Vazirmatn; font-size: 15px; cursor: pointer; }
+        button:hover { background: #1565C0; }
+        table { width: 100%; background: white; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        th { background: #1976D2; color: white; padding: 14px; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; }
+        tr:hover td { background: #f5f9ff; }
+        a { text-decoration: none; }
+        .icon-link { font-size: 20px; }
+        .empty { text-align: center; padding: 40px; color: #999; }
+        .alert { background: #ffebee; color: #c62828; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .success { background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
+        .card h3 { color: #666; font-size: 14px; margin: 0 0 10px; }
+        .card p { color: #1976D2; font-size: 22px; font-weight: bold; margin: 0; }
+        .btn-red { background: #e53935; }
+        .btn-red:hover { background: #c62828; }
+        .btn-green { background: #43a047; }
+        .btn-green:hover { background: #2e7d32; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <span class="user">👤 {{ session.username }}</span>
+            <a href="/logout" class="logout">🚪 خروج</a>
+        </div>
+        <h1>{% block header %}🛒 مدیریت فروشگاه{% endblock %}</h1>
+        <div class="nav">
+            <a href="/">🏠 داشبورد</a>
+            <a href="/products">📦 محصولات</a>
+            <a href="/customers">👥 مشتری‌ها</a>
+            <a href="/invoices">🧾 فاکتورها</a>
+            <a href="/cash">💰 صندوق</a>
+            <a href="/reports">📊 گزارش‌ها</a>
+            <a href="/support">📞 پشتیبانی</a>
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
