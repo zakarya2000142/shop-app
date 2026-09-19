@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}مشتری‌ها{% endblock %}
+{% block header %}👥 مشتری‌ها{% endblock %}
+{% block content %}
+
+<form action="/add_customer" method="post">
+    <input type="text" name="name" placeholder="اسم مشتری" required>
+    <input type="text" name="phone" placeholder="شماره تماس">
+    <input type="text" name="address" placeholder="آدرس">
+    <button type="submit">افزودن</button>
+</form>
+
+{% if customers %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>اسم</th>
+        <th>شماره</th>
+        <th>آدرس</th>
+        <th>بدهکاری</th>
+        <th>عملیات</th>
+        <th>ویرایش</th>
+        <th>حذف</th>
+    </tr>
+    {% for c in customers %}
+    <tr>
+        <td>{{ c["id"] }}</td>
+        <td>{{ c["name"] }}</td>
+        <td>{{ c["phone"] or "-" }}</td>
+        <td>{{ c["address"] or "-" }}</td>
+        <td>
+            {% if c["debt"] > 0 %}
+                <span style="color:red;">{{ "{:,}".format(c["debt"]) }} تومان</span>
+            {% else %}
+                صفر
+            {% endif %}
+        </td>
+        <td>
+            <form action="/add_debt/{{ c['id'] }}" method="post" style="display:inline; background:none; padding:0; box-shadow:none; margin:0;">
+                <input type="number" name="amount" placeholder="مبلغ" style="width:80px; padding:5px; font-size:12px;">
+                <button type="submit" class="btn-red" style="padding:5px 10px; font-size:12px;">بدهکار</button>
+            </form>
+            <form action="/pay_debt/{{ c['id'] }}" method="post" style="display:inline; background:none; padding:0; box-shadow:none; margin:0;">
+                <input type="number" name="amount" placeholder="مبلغ" style="width:80px; padding:5px; font-size:12px;">
+                <button type="submit" class="btn-green" style="padding:5px 10px; font-size:12px;">پرداخت</button>
+            </form>
+        </td>
+        <td><a class="icon-link" href="/edit_customer/{{ c['id'] }}">✏️</a></td>
+        <td><a class="icon-link" href="/delete_customer/{{ c['id'] }}" onclick="return confirm('مطمئنی؟')">🗑️</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty">هنوز مشتری‌ای ثبت نشده.</div>
+{% endif %}
+
+{% endblock %}
