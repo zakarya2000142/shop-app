@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}صندوق{% endblock %}
+{% block header %}💰 صندوق{% endblock %}
+{% block content %}
+
+<div class="cards">
+    <div class="card">
+        <h3>موجودی صندوق</h3>
+        <p>{{ "{:,}".format(balance) }} تومان</p>
+    </div>
+</div>
+
+<form action="/cash" method="post">
+    <select name="type" required>
+        <option value="in">دریافت نقدی</option>
+        <option value="out">پرداخت نقدی</option>
+    </select>
+    <input type="number" name="amount" placeholder="مبلغ" required>
+    <input type="text" name="description" placeholder="توضیحات (اختیاری)">
+    <button type="submit">ثبت</button>
+</form>
+
+{% if cash_list %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>نوع</th>
+        <th>مبلغ</th>
+        <th>توضیحات</th>
+        <th>تاریخ</th>
+    </tr>
+    {% for c in cash_list %}
+    <tr>
+        <td>{{ c["id"] }}</td>
+        <td>
+            {% if c["type"] == "in" %}
+                <span style="color:green;">دریافت</span>
+            {% else %}
+                <span style="color:red;">پرداخت</span>
+            {% endif %}
+        </td>
+        <td>{{ "{:,}".format(c["amount"]) }}</td>
+        <td>{{ c["description"] or "-" }}</td>
+        <td>{{ c["date"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty">هنوز تراکنش صندوقی ثبت نشده.</div>
+{% endif %}
+
+{% endblock %}
