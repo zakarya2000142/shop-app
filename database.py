@@ -54,7 +54,8 @@ def init_db():
         customer_id INTEGER,
         date TEXT NOT NULL,
         total_amount INTEGER NOT NULL,
-        total_profit INTEGER NOT NULL
+        total_profit INTEGER NOT NULL,
+        payment_type TEXT DEFAULT 'cash'
     )
     """)
 
@@ -75,6 +76,16 @@ def init_db():
         type TEXT NOT NULL,
         amount INTEGER NOT NULL,
         description TEXT,
+        date TEXT NOT NULL
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS debt_payments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        customer_id INTEGER,
+        amount INTEGER NOT NULL,
         date TEXT NOT NULL
     )
     """)
@@ -188,10 +199,14 @@ def pay_debt(user_id, customer_id, amount):
     conn = get_connection()
     conn.execute("UPDATE customers SET debt = debt - ? WHERE id = ? AND user_id = ?",
                  (amount, customer_id, user_id))
+    conn.execute(
+        "INSERT INTO debt_payments (user_id, customer_id, amount, date) VALUES (?, ?, ?, ?)",
+        (user_id, customer_id, amount, datetime.now().strftime("%Y-%m-%d %H:%M"))
+    )
     conn.commit()
     conn.close()
 
-def add_invoice(user_id, customer_id, items):
+def add_invoice(user_id, customer_id, items, payment_type="cash"):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -205,9 +220,9 @@ def add_invoice(user_id, customer_id, items):
         total_profit += (item["sell_price"] - item["buy_price"]) * item["count"]
 
     cursor.execute("""
-        INSERT INTO invoices (user_id, customer_id, date, total_amount, total_profit)
-        VALUES (?, ?, ?, ?, ?)
-    """, (user_id, customer_id, date, total_amount, total_profit))
+        INSERT INTO invoices (user_id, customer_id, date, total_amount, total_profit, payment_type)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (user_id, customer_id, date, total_amount, total_profit, payment_type))
 
     invoice_id = cursor.lastrowid
 
@@ -219,6 +234,10 @@ def add_invoice(user_id, customer_id, items):
 
         cursor.execute("UPDATE products SET count = count - ? WHERE id = ?",
                        (item["count"], item["product_id"]))
+
+    if payment_type == "credit":
+        cursor.execute("UPDATE customers SET debt = debt + ? WHERE id = ? AND user_id = ?",
+                       (total_amount, customer_id, user_id))
 
     conn.commit()
     conn.close()
@@ -290,18 +309,28 @@ def get_cash_balance(user_id):
 
 def get_total_report(user_id):
     conn = get_connection()
-    row = conn.execute("""
+    cash = conn.execute("""
         SELECT SUM(total_amount) as total, SUM(total_profit) as profit
-        FROM invoices WHERE user_id = ?
+        FROM invoices WHERE user_id = ? AND payment_type = 'cash'
+    """, (user_id,)).fetchone()
+    debt = conn.execute("""
+        SELECT SUM(amount) as total FROM debt_payments WHERE user_id = ?
     """, (user_id,)).fetchone()
     conn.close()
-    return row["total"] or 0, row["profit"] or 0
+    total = (cash["total"] or 0) + (debt["total"] or 0)
+    profit = cash["profit"] or 0
+    return total, profit
 
 def get_report_by_date(user_id, start_date):
     conn = get_connection()
-    row = conn.execute("""
+    cash = conn.execute("""
         SELECT SUM(total_amount) as total, SUM(total_profit) as profit
-        FROM invoices WHERE user_id = ? AND date >= ?
+        FROM invoices WHERE user_id = ? AND date >= ? AND payment_type = 'cash'
+    """, (user_id, start_date)).fetchone()
+    debt = conn.execute("""
+        SELECT SUM(amount) as total FROM debt_payments WHERE user_id = ? AND date >= ?
     """, (user_id, start_date)).fetchone()
     conn.close()
-    return row["total"] or 0, row["profit"] or 0
+    total = (cash["total"] or 0) + (debt["total"] or 0)
+    profit = cash["profit"] or 0
+    return total, profit
