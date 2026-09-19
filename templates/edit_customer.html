@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}ویرایش مشتری{% endblock %}
+{% block header %}✏️ ویرایش مشتری{% endblock %}
+{% block content %}
+
+<form method="post" style="max-width:500px; margin:0 auto; flex-direction:column;">
+    <input type="text" name="name" value="{{ customer['name'] }}" required>
+    <input type="text" name="phone" value="{{ customer['phone'] or '' }}">
+    <input type="text" name="address" value="{{ customer['address'] or '' }}">
+    <button type="submit">ذخیره</button>
+</form>
+
+{% endblock %}
