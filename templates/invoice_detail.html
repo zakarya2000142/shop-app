@@ -20,6 +20,16 @@
         <h3>سود</h3>
         <p>{{ "{:,}".format(invoice["total_profit"]) }}</p>
     </div>
+    <div class="card">
+        <h3>نوع پرداخت</h3>
+        <p>
+            {% if invoice["payment_type"] == "credit" %}
+                📝 نسیه
+            {% else %}
+                💵 نقدی
+            {% endif %}
+        </p>
+    </div>
 </div>
 
 <table>
