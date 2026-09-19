@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}گزارش‌ها{% endblock %}
+{% block header %}📊 گزارش‌ها{% endblock %}
+{% block content %}
+
+<div class="cards">
+    <div class="card">
+        <h3>امروز</h3>
+        <p>درآمد: {{ "{:,}".format(t_total) }}</p>
+        <p style="color:#4CAF50; font-size:16px;">سود: {{ "{:,}".format(t_profit) }}</p>
+    </div>
+    <div class="card">
+        <h3>هفته اخیر</h3>
+        <p>درآمد: {{ "{:,}".format(w_total) }}</p>
+        <p style="color:#4CAF50; font-size:16px;">سود: {{ "{:,}".format(w_profit) }}</p>
+    </div>
+    <div class="card">
+        <h3>ماه اخیر</h3>
+        <p>درآمد: {{ "{:,}".format(m_total) }}</p>
+        <p style="color:#4CAF50; font-size:16px;">سود: {{ "{:,}".format(m_profit) }}</p>
+    </div>
+    <div class="card">
+        <h3>سال اخیر</h3>
+        <p>درآمد: {{ "{:,}".format(y_total) }}</p>
+        <p style="color:#4CAF50; font-size:16px;">سود: {{ "{:,}".format(y_profit) }}</p>
+    </div>
+</div>
+
+<div class="cards">
+    <div class="card">
+        <h3>درآمد کل</h3>
+        <p>{{ "{:,}".format(total) }} تومان</p>
+    </div>
+    <div class="card">
+        <h3>سود کل</h3>
+        <p>{{ "{:,}".format(profit) }} تومان</p>
+    </div>
+</div>
+
+{% endblock %}
