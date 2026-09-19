@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}فاکتورها{% endblock %}
+{% block header %}🧾 فاکتورها{% endblock %}
+{% block content %}
+
+<div style="text-align:center; margin-bottom:20px;">
+    <a href="/new_invoice" style="display:inline-block; padding:12px 30px; background:#1976D2; color:white; border-radius:8px; text-decoration:none;">➕ فاکتور جدید</a>
+</div>
+
+{% if invoices %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>مشتری</th>
+        <th>تاریخ</th>
+        <th>مبلغ کل</th>
+        <th>سود</th>
+        <th>مشاهده</th>
+        <th>حذف</th>
+    </tr>
+    {% for i in invoices %}
+    <tr>
+        <td>{{ i["id"] }}</td>
+        <td>{{ i["customer_name"] or "مهمان" }}</td>
+        <td>{{ i["date"] }}</td>
+        <td>{{ "{:,}".format(i["total_amount"]) }}</td>
+        <td>{{ "{:,}".format(i["total_profit"]) }}</td>
+        <td><a class="icon-link" href="/invoice/{{ i['id'] }}">👁️</a></td>
+        <td><a class="icon-link" href="/delete_invoice/{{ i['id'] }}" onclick="return confirm('مطمئنی؟')">🗑️</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty">هنوز فاکتوری ثبت نشده.</div>
+{% endif %}
+
+{% endblock %}
